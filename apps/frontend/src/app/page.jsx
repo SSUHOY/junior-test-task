@@ -12,48 +12,24 @@ import getMockAdsData from './components/ads/filters/ads.filters';
 import useAdsList from './components/hooks/useAdsList';
 
 const Index = () => {
-  const [ads, setAds] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [errorRes, setError] = useState(null);
+  const { data, error, isLoading, applyFilters } = useAdsList();
 
-  const { applyFilters } = useAdsList();
-
-  useEffect(() => {
-    const fetchAds = async () => {
-      try {
-        const response = await axios.get('/api/ads');
-        setAds(response.data.results);
-        setLoading(false);
-      } catch (error) {
-        if (error.response && error.response.status === 500) {
-          toast.error('Server error. Please try again later.');
-          const retry = window.confirm(
-            'An error occurred. Retry fetching ads?'
-          );
-          if (retry) {
-            fetchAds();
-          }
-        } else {
-          setError('Error with fetching ads. Please try again later.');
-        }
-        setLoading(false);
-      }
-    };
-    fetchAds();
-  }, []);
+  const [likedPosts, setLikedPosts] = useState([]);
 
   return (
     <Container maxWidth="lg" className={styles.container}>
-      <div>
-        <h1>List of ads</h1>
-      </div>
-      <Box component="form" noValidate autoComplete="off">
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        className={styles.filters}
+      >
         {getMockAdsData.filterList.map((filter) => (
           <div key={filter.id}>
             {filter.select ? (
               <TextField
+                className={styles.input}
                 id={filter.id}
-                select
                 label="Select"
                 helperText={filter.helperText}
                 onChange={(e) => applyFilters({ [filter.key]: e.target.value })}
@@ -66,6 +42,7 @@ const Index = () => {
               </TextField>
             ) : (
               <TextField
+                className={styles.input}
                 id={filter.id}
                 type={filter.type}
                 helperText={filter.helperText}
@@ -82,13 +59,16 @@ const Index = () => {
           </div>
         ))}
       </Box>
+
       <ToastContainer />
       <Box alignContent="center">
-        <Grid container maxWidth={1170} rowGap={2.5}>
-          {loading && <Skeleton count={4} />}
-          {!loading && ads.length === 0 ? <p>{errorRes}</p> : null}
-          {!loading && ads?.length
-            ? ads.map((item) => (
+        <Grid container maxWidth={1370} rowGap={2.5} className={styles.list}>
+          {isLoading && <Skeleton count={4} />}
+          {!isLoading && data.results.length === 0 ? (
+            <p>No results found</p>
+          ) : null}
+          {!isLoading && data.results.length
+            ? data.results.map((item) => (
                 <AdsCard
                   id={item.id}
                   key={item.id}
@@ -98,6 +78,8 @@ const Index = () => {
                   title={item.title}
                   desc={item.description}
                   price={item.price}
+                  likedPosts={likedPosts}
+                  setLikedPosts={setLikedPosts}
                 />
               ))
             : null}

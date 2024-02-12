@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import styles from '../../../styles/ads-card.module.scss';
 
-const AdsCard = ({ city, title, price, images, desc, item }) => {
+const AdsCard = ({ city, title, price, images, item }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [liked, isLiked] = useState();
+  const [liked, setIsLiked] = useState(false);
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -16,8 +16,16 @@ const AdsCard = ({ city, title, price, images, desc, item }) => {
     );
   };
 
+  const handleLikeButton = () => {
+    if (liked) {
+      setIsLiked(false);
+    } else {
+      setIsLiked(true);
+    }
+  };
+
   return (
-    <Grid item xs={12} sm={6} md={4} className={styles.card}>
+    <div className={styles.card}>
       <div className={styles.imageCarousel}>
         <button
           type="submit"
@@ -43,7 +51,11 @@ const AdsCard = ({ city, title, price, images, desc, item }) => {
       <div className={styles.content}>
         <div className={styles.contentRow}>
           <div className={styles.title}>{title}</div>
-          <button type="submit" className={styles.likeButton}>
+          <button
+            type="submit"
+            className={styles.likeButton}
+            onClick={handleLikeButton}
+          >
             {liked ? '❤️' : '♡'}
           </button>
         </div>
@@ -53,7 +65,7 @@ const AdsCard = ({ city, title, price, images, desc, item }) => {
           <span className={styles.price}>{price} ฿</span>
         </div>
       </div>
-    </Grid>
+    </div>
   );
 };
 
