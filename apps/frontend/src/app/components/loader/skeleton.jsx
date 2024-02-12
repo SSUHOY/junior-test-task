@@ -5,7 +5,10 @@ function Skeleton(props) {
   const { count } = props;
 
   const skeletonElements = Array.from({ length: count }, (_, index) => (
-    <div key={index} className={`${styles.skeleton} ${styles.skeletonCard}`} />
+      <div
+        key={index}
+        className={`${styles.skeleton} ${styles.skeletonCard}`}
+      />
   ));
 
   return <div className={styles.list}>{skeletonElements}</div>;

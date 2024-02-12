@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
+import React, { useState } from 'react';
+import Link from 'next/link';
 import styles from '../../../styles/ads-card.module.scss';
+import useFavorite from '../../hooks/useFav';
 
-const AdsCard = ({ city, title, price, images, item }) => {
+const AdsCard = ({ city, title, price, images, item, id, handleAdvClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [liked, setIsLiked] = useState(false);
+
+  const { isFavoriteItem, handleToggleFavoriteItem } = useFavorite();
+
+  const isAdvFavorite = isFavoriteItem(id);
+
+  const handleAdDetailsClick = () => {
+    handleAdvClick(item.id);
+  };
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -14,14 +22,6 @@ const AdsCard = ({ city, title, price, images, item }) => {
     setCurrentImageIndex(
       (prevIndex) => (prevIndex - 1 + images.length) % images.length
     );
-  };
-
-  const handleLikeButton = () => {
-    if (liked) {
-      setIsLiked(false);
-    } else {
-      setIsLiked(true);
-    }
   };
 
   return (
@@ -48,15 +48,30 @@ const AdsCard = ({ city, title, price, images, item }) => {
         </button>
       </div>
 
-      <div className={styles.content}>
+      <div
+        className={styles.content}
+        onClick={handleAdDetailsClick}
+        onKeyDown={(e) => {
+          if (e.key === 'i') {
+            handleAdDetailsClick();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+      >
         <div className={styles.contentRow}>
-          <div className={styles.title}>{title}</div>
+          <Link href={`/ads/${item.id}`} key={item.id}>
+            <div className={styles.title}>{title}</div>
+          </Link>
+
           <button
             type="submit"
             className={styles.likeButton}
-            onClick={handleLikeButton}
+            onClick={() => {
+              handleToggleFavoriteItem(id);
+            }}
           >
-            {liked ? '❤️' : '♡'}
+            {isAdvFavorite ? '❤️' : '♡'}
           </button>
         </div>
 
