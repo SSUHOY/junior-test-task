@@ -2,16 +2,21 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Box, Dialog, Button, Grid, Container } from '@mui/material';
+import { Box, Grid, Container, TextField, MenuItem } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import styles from './styles/ads.module.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import AdsCard from './components/ads/card/ads-card';
+import Skeleton from './components/loader/skeleton';
+import getMockAdsData from './components/ads/filters/ads.filters';
+import useAdsList from './components/hooks/useAdsList';
 
 const Index = () => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorRes, setError] = useState(null);
+
+  const { applyFilters } = useAdsList();
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -29,7 +34,7 @@ const Index = () => {
             fetchAds();
           }
         } else {
-          setError('Error fetching ads. Please try again later.');
+          setError('Error with fetching ads. Please try again later.');
         }
         setLoading(false);
       }
@@ -38,10 +43,49 @@ const Index = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <Container maxWidth="lg" className={styles.container}>
+      <div>
+        <h1>List of ads</h1>
+      </div>
+      <Box component="form" noValidate autoComplete="off">
+        {getMockAdsData.filterList.map((filter) => (
+          <div key={filter.id}>
+            {filter.select ? (
+              <TextField
+                id={filter.id}
+                select
+                label="Select"
+                helperText={filter.helperText}
+                onChange={(e) => applyFilters({ [filter.key]: e.target.value })}
+              >
+                {filter.options?.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            ) : (
+              <TextField
+                id={filter.id}
+                type={filter.type}
+                helperText={filter.helperText}
+                onChange={(e) =>
+                  applyFilters({
+                    [filter.key]:
+                      filter.type === 'number'
+                        ? Number(e.target.value)
+                        : e.target.value,
+                  })
+                }
+              />
+            )}
+          </div>
+        ))}
+      </Box>
       <ToastContainer />
       <Box alignContent="center">
-        <Grid container justifyContent="center" maxWidth={1170} rowGap={2.5}>
+        <Grid container maxWidth={1170} rowGap={2.5}>
+          {loading && <Skeleton count={4} />}
           {!loading && ads.length === 0 ? <p>{errorRes}</p> : null}
           {!loading && ads?.length
             ? ads.map((item) => (
@@ -59,7 +103,7 @@ const Index = () => {
             : null}
         </Grid>
       </Box>
-    </div>
+    </Container>
   );
 };
 
