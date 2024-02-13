@@ -80,11 +80,11 @@ const AdsList = ({ onAdvClick }) => {
       <Box alignContent="center">
         <Grid container maxWidth={1370} rowGap={2.5} className={styles.list}>
           {isLoading && <Skeleton count={4} />}
-          {!isLoading && data.results.length === 0 ? (
+          {!isLoading && data?.results?.length === 0 ? (
             <p>No results found</p>
           ) : null}
-          {!isLoading && data.results.length
-            ? data.results.map((item) => (
+          {!isLoading && data?.results?.length
+            ? data?.results?.map((item) => (
                 <AdsCard
                   id={item.id}
                   key={item.id}

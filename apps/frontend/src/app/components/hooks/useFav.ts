@@ -3,14 +3,14 @@
 import { useEffect, useState } from 'react';
 
 function useFavorite() {
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState<number[]>([]);
 
   JSON.parse(localStorage.getItem('favorites') || '[]');
 
-  const isFavoriteItem = (id) => favorites.includes(id);
+  const isFavoriteItem = (id: number) => favorites.includes(id);
 
-  const handleToggleFavoriteItem = (id) => {
-    setFavorites((prevFavorites) => {
+  const handleToggleFavoriteItem = (id: number) => {
+    setFavorites((prevFavorites: number[]) => {
       const isFavorite = isFavoriteItem(id);
 
       if (!isFavorite) {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import AdDetails from '../ads/adsDetails/adv-details';
+import { useParams } from 'next/navigation';
+import AdDetails from '../adsDetails/adv-details';
 
 async function fetchAdById(id) {
   try {
@@ -22,12 +23,13 @@ async function fetchAdById(id) {
   return null;
 }
 
-const AdvDetails = ({ params }) => {
+const AdvDetails = () => {
+  const { id } = useParams();
   const [ad, setAd] = useState({});
 
   useEffect(() => {
     const getAd = async () => {
-      const fetchData = await fetchAdById(params.id);
+      const fetchData = await fetchAdById(id);
 
       setAd(fetchData);
     };

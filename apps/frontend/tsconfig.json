@@ -30,7 +30,7 @@
     "../../dist/apps/frontend/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts"
-  ],
+, "src/app/components/hooks/useFav.jsts"  ],
   "exclude": [
     "node_modules",
     "jest.config.ts",

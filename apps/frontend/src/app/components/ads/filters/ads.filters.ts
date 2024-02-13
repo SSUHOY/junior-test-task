@@ -1,3 +1,5 @@
+import { IGetFilters } from "../../../interfaces/types";
+
 const city = [
   {
     value: 'Паттайя',
@@ -36,7 +38,7 @@ const district = [
   },
 ];
 
-const filterList = [
+const filterList: IGetFilters[] = [
   {
     id: 'outlined-minPrice',
     key: 'minPrice',

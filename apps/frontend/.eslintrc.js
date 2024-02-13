@@ -28,7 +28,7 @@ module.exports = {
         'eslint-plugin-import/no-extraneous-dependencies': 'off',
         'import/no-extraneous-dependencies': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
-        'no-console': 'off',
+        'no-console': 'error',
         'react/prop-types': 'off',
         'spaced-comment': [
           'error',

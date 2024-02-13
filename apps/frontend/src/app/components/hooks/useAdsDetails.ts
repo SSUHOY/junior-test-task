@@ -2,8 +2,9 @@
 
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
+import { IResponseItem } from '../../interfaces/types';
 
-const fetchAdsDetails = async (id) => {
+const fetchAdsDetails = async (id: number) => {
   const url = `/api/ads/${id}`;
 
   const response = await fetch(url);
@@ -18,8 +19,8 @@ const fetchAdsDetails = async (id) => {
   return response.json();
 };
 
-function useAdsDetails(id) {
-  const { data, error, isLoading } = useQuery({
+function useAdsDetails(id: number) {
+  const { data, error, isLoading } = useQuery<IResponseItem>({
     queryKey: [`AdsDetail ${id}`],
     queryFn: () => fetchAdsDetails(id),
   });
