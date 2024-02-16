@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -17,7 +19,7 @@ async function fetchAdById(id) {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: 'white',
+      theme: 'dark',
     });
   }
   return null;
@@ -25,21 +27,20 @@ async function fetchAdById(id) {
 
 const AdvDetails = () => {
   const { id } = useParams();
-  const [ad, setAd] = useState({});
-
+  const [ad, setAds] = useState(null);
+  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     const getAd = async () => {
       const fetchData = await fetchAdById(id);
-
-      setAd(fetchData);
+      setAds(fetchData);
+      setLoading(false);
     };
-
     getAd();
-  });
+  }, [id]);
 
   return (
     <div>
-      <AdDetails ad={ad} />
+      <AdDetails ad={ad} isLoading={isLoading} />
       <ToastContainer />
     </div>
   );

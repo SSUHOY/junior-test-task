@@ -60,7 +60,7 @@ const AdsCard = ({ city, title, price, images, item, id, handleAdvClick }) => {
         tabIndex={0}
       >
         <div className={styles.contentRow}>
-          <Link href={`../../ads/${id}/`} key={item.id}>
+          <Link href={`components/ads/${id}`}>
             <div className={styles.title}>{title}</div>
           </Link>
 

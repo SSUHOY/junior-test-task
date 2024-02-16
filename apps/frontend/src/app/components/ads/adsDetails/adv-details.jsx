@@ -1,9 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from '../../../styles/ads-details.module.scss';
+import Skeleton from '../../loader/skeleton';
 
-const AdDetails = ({ ad }) => {
+const AdDetails = ({ ad, isLoading }) => {
+  const router = useRouter();
+
   const [curImgId, setCurImgId] = useState(0);
 
   const onClickNext = () => {
@@ -22,8 +26,19 @@ const AdDetails = ({ ad }) => {
     }
   };
 
+  if (!ad || isLoading) {
+    return <Skeleton count={1} />;
+  }
+
   return (
     <div className={styles.root}>
+      <button
+        type="button"
+        onClick={() => router.back()}
+        className={styles.back__to_button}
+      >
+        Click here to go back
+      </button>
       <div className={styles.root__carousel}>
         <div
           onClick={onClickPrev}
@@ -31,6 +46,7 @@ const AdDetails = ({ ad }) => {
           tabIndex={0}
           className={styles.root__carousel_prev}
         >{`<`}</div>
+
         <img src={ad.images[curImgId].image} alt={`img ${ad.title}`} />
         <div
           onClick={onClickNext}
